@@ -3,6 +3,10 @@
 import Image from "next/image";
 import { useEffect, useId, useRef, useState } from "react";
 import BoosterCard from "@/components/BoosterCard";
+import {
+  menuCategorySelectEvent,
+  type MenuCategorySelectDetail,
+} from "@/components/menu-navigation";
 import type { MenuCategory, MenuProduct } from "@/types/menu";
 
 interface ActiveImage {
@@ -69,15 +73,43 @@ export default function Menu({
     ...orderedCategories.map((category) => category.name),
   ];
   const [activeFilter, setActiveFilter] = useState("All");
+  const [showFullMenu, setShowFullMenu] = useState(false);
   const [activeImage, setActiveImage] = useState<ActiveImage>();
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const imageDialogTitleId = useId();
   const lastImageTriggerRef = useRef<HTMLButtonElement | null>(null);
 
+  const featuredDrinks = orderedDrinks.filter((drink) => drink.featured);
+  const allPreviewDrinks = (
+    featuredDrinks.length > 0 ? featuredDrinks : orderedDrinks
+  ).slice(0, 6);
   const visibleDrinks =
     activeFilter === "All"
-      ? orderedDrinks
+      ? showFullMenu
+        ? orderedDrinks
+        : allPreviewDrinks
       : orderedDrinks.filter((drink) => drink.category === activeFilter);
+
+  useEffect(() => {
+    function handleCategorySelect(event: Event) {
+      const { category } = (
+        event as CustomEvent<MenuCategorySelectDetail>
+      ).detail;
+
+      setActiveFilter(category);
+      setShowFullMenu(false);
+      window.history.replaceState(null, "", "#menu");
+      document
+        .getElementById("menu")
+        ?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    window.addEventListener(menuCategorySelectEvent, handleCategorySelect);
+
+    return () => {
+      window.removeEventListener(menuCategorySelectEvent, handleCategorySelect);
+    };
+  }, []);
 
   useEffect(() => {
     if (!activeImage) {
@@ -144,7 +176,13 @@ export default function Menu({
                   key={filter}
                   type="button"
                   aria-pressed={isActive}
-                  onClick={() => setActiveFilter(filter)}
+                  onClick={() => {
+                    setActiveFilter(filter);
+
+                    if (filter === "All") {
+                      setShowFullMenu(false);
+                    }
+                  }}
                   className={`shrink-0 rounded-full border px-5 py-2.5 text-sm font-bold transition duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-700 ${
                     isActive
                       ? "border-purple-700 bg-purple-700 text-white shadow-sm"
@@ -243,6 +281,20 @@ export default function Menu({
             ),
           )}
         </div>
+
+        {activeFilter === "All" &&
+          !showFullMenu &&
+          allPreviewDrinks.length < orderedDrinks.length && (
+            <div className="mt-8 text-center">
+              <button
+                type="button"
+                onClick={() => setShowFullMenu(true)}
+                className="inline-flex min-h-11 items-center justify-center rounded-full border border-purple-200 bg-white px-6 py-2.5 text-sm font-black text-purple-700 transition hover:border-purple-300 hover:text-purple-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-700"
+              >
+                View Full Menu
+              </button>
+            </div>
+          )}
       </div>
 
       {activeImage && (

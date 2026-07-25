@@ -1,3 +1,7 @@
+"use client";
+
+import { selectMenuCategory } from "@/components/menu-navigation";
+
 const categories = [
   {
     icon: "🧋",
@@ -27,7 +31,7 @@ const categories = [
 
 export default function Categories() {
   return (
-    <section id="menu" className="bg-white py-20 sm:py-24">
+    <section id="categories" className="bg-white py-20 sm:py-24">
       <div className="mx-auto max-w-7xl px-5 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
           <p className="text-xs font-black uppercase tracking-[0.24em] text-purple-600 sm:text-sm">
@@ -66,6 +70,10 @@ export default function Categories() {
 
               <a
                 href="#menu"
+                onClick={(event) => {
+                  event.preventDefault();
+                  selectMenuCategory(category.name);
+                }}
                 className="mt-6 inline-flex min-h-11 w-fit items-center gap-2 rounded-full border border-purple-200 bg-white/80 px-5 py-2.5 text-sm font-black text-purple-700 transition hover:border-purple-300 hover:bg-white hover:text-purple-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-700"
               >
                 View menu
