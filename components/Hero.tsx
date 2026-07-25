@@ -1,7 +1,16 @@
 import Image from "next/image";
-import { business } from "@/data/business";
+import type {
+  BusinessInfoContent,
+  HeroContent,
+} from "@/types/site-content";
 
-export default function Hero() {
+export default function Hero({
+  hero,
+  business,
+}: {
+  hero: HeroContent;
+  business: BusinessInfoContent;
+}) {
   return (
     <section
       id="home"
@@ -16,45 +25,44 @@ export default function Hero() {
         {/* LEFT */}
         <div>
           <div className="inline-flex items-center rounded-full border border-purple-200 bg-white px-5 py-2 text-xs font-bold uppercase tracking-[0.25em] text-purple-700 shadow-sm">
-            ✨ Freshly Made in {business.city}
+            {hero.eyebrow}
           </div>
 
           <h1 className="mt-8 text-5xl font-black leading-[0.95] text-[#23182f] sm:text-6xl lg:text-7xl">
-            Handcrafted
+            {hero.headlineLineOne}
             <br />
-            drinks
+            {hero.headlineLineTwo}
             <span className="block bg-gradient-to-r from-purple-700 to-pink-500 bg-clip-text text-transparent">
-              you&apos;ll love.
+              {hero.headlineHighlight}
             </span>
           </h1>
 
           <p className="mt-8 max-w-xl text-lg leading-8 text-gray-600">
-            Creamy milk teas, refreshing loaded teas, protein shakes and
-            delicious waffles prepared fresh at {business.name}.
+            {hero.supportingText}
           </p>
 
           <div className="mt-10 flex flex-wrap gap-4">
             <a
-              href="#menu"
+              href={hero.primaryButton.destination}
               className="inline-flex min-h-12 items-center justify-center rounded-full bg-purple-700 px-8 py-4 font-bold text-white transition hover:bg-purple-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-700"
             >
-              Explore Menu
+              {hero.primaryButton.text}
             </a>
 
             <a
-              href={business.delivery.doordash}
+              href={hero.secondaryButton.destination || business.orderingUrl}
               target="_blank"
               rel="noreferrer"
               className="inline-flex min-h-12 items-center justify-center rounded-full border border-purple-300 bg-white px-8 py-4 font-bold text-purple-700 transition hover:bg-purple-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-700"
             >
-              Order Online
+              {hero.secondaryButton.text}
             </a>
           </div>
 
           <div className="mt-10 flex flex-wrap gap-6 font-semibold text-gray-600">
-            <span>✓ Made Fresh</span>
-            <span>✓ Premium Flavors</span>
-            <span>✓ Delivery Available</span>
+            {hero.trustPoints.map((point) => (
+              <span key={point}>✓ {point}</span>
+            ))}
           </div>
         </div>
 
@@ -62,8 +70,8 @@ export default function Hero() {
         <div className="relative flex items-center justify-center">
 
           <Image
-            src="/images/tarotwaffle.png"
-            alt="Bubble House Signature"
+            src={hero.imageUrl}
+            alt={hero.imageAlt}
             width={640}
             height={760}
             priority
@@ -72,11 +80,11 @@ export default function Hero() {
 
           <div className="absolute right-0 top-8 rounded-2xl bg-[#23182f] px-5 py-4 text-white shadow-2xl">
             <p className="text-[10px] uppercase tracking-[0.18em] text-yellow-300">
-              Customer Favorite
+              {hero.imageBadgeEyebrow}
             </p>
 
             <p className="mt-1 text-sm font-bold">
-              Freshly Prepared ✨
+              {hero.imageBadgeText}
             </p>
           </div>
 

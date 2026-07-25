@@ -1,20 +1,29 @@
-import { business } from "@/data/business";
+import type {
+  BusinessInfoContent,
+  VisitSectionContent,
+} from "@/types/site-content";
 
-export default function VisitUs() {
+export default function VisitUs({
+  section,
+  business,
+}: {
+  section: VisitSectionContent;
+  business: BusinessInfoContent;
+}) {
   return (
     <section id="visit" className="bg-[#fcfaf7] py-20 sm:py-24">
       <div className="mx-auto max-w-7xl px-5 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
           <p className="text-xs font-black uppercase tracking-[0.24em] text-purple-600 sm:text-sm">
-            Visit Bubble House
+            {section.eyebrow}
           </p>
 
           <h2 className="mt-3 text-4xl font-black tracking-tight text-[#23182f] sm:text-5xl">
-            Come see us
+            {section.title}
           </h2>
 
           <p className="mt-4 text-lg leading-8 text-gray-600">
-            Stop by for your favorite drinks, shakes, coffee and waffles.
+            {section.description}
           </p>
         </div>
 
@@ -49,9 +58,10 @@ export default function VisitUs() {
                     Address
                   </h4>
                   <address className="mt-2 not-italic leading-7 text-gray-600">
-                    {business.address}
+                    {business.address.street}
                     <br />
-                    {business.city}, {business.state} {business.zip}
+                    {business.address.city}, {business.address.state}{" "}
+                    {business.address.zip}
                   </address>
                 </div>
               </div>
@@ -111,18 +121,17 @@ export default function VisitUs() {
                     Hours
                   </h4>
                   <dl className="mt-2 space-y-2 text-gray-600">
-                    <div className="flex flex-col justify-between gap-1 sm:flex-row sm:gap-4">
-                      <dt>Monday – Saturday</dt>
-                      <dd className="font-semibold text-[#352b40]">
-                        {business.hours.mondaySaturday}
-                      </dd>
-                    </div>
-                    <div className="flex flex-col justify-between gap-1 sm:flex-row sm:gap-4">
-                      <dt>Sunday</dt>
-                      <dd className="font-semibold text-[#352b40]">
-                        {business.hours.sunday}
-                      </dd>
-                    </div>
+                    {business.businessHours.map((row) => (
+                      <div
+                        key={row.label}
+                        className="flex flex-col justify-between gap-1 sm:flex-row sm:gap-4"
+                      >
+                        <dt>{row.label}</dt>
+                        <dd className="font-semibold text-[#352b40]">
+                          {row.hours}
+                        </dd>
+                      </div>
+                    ))}
                   </dl>
                 </div>
               </div>
@@ -133,17 +142,17 @@ export default function VisitUs() {
                 href={`tel:${business.phoneLink}`}
                 className="inline-flex min-h-12 items-center justify-center rounded-full bg-purple-700 px-6 py-3 text-sm font-black text-white transition hover:bg-purple-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-700"
               >
-                Call us
+                {section.callButtonText}
               </a>
 
-              {business.delivery.doordash && (
+              {business.orderingUrl && (
                 <a
-                  href={business.delivery.doordash}
+                  href={business.orderingUrl}
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex min-h-12 items-center justify-center rounded-full border border-purple-200 bg-white px-6 py-3 text-sm font-black text-purple-700 transition hover:border-purple-300 hover:bg-purple-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-700"
                 >
-                  Order online
+                  {section.orderButtonText}
                 </a>
               )}
             </div>
@@ -191,22 +200,23 @@ export default function VisitUs() {
               </div>
 
               <p className="mt-6 text-xs font-black uppercase tracking-[0.2em] text-purple-600">
-                Find us in {business.city}
+                {section.mapEyebrow}
               </p>
               <h3 className="mt-3 text-2xl font-black tracking-tight text-[#23182f]">
-                Your next favorite is nearby
+                {section.mapTitle}
               </h3>
               <p className="mt-3 leading-7 text-gray-600">
-                {business.address}, {business.city}, {business.state} {business.zip}
+                {business.address.street}, {business.address.city},{" "}
+                {business.address.state} {business.address.zip}
               </p>
 
               <a
-                href={business.maps.google}
+                href={business.googleMapsUrl}
                 target="_blank"
                 rel="noreferrer"
                 className="mt-7 inline-flex min-h-12 items-center justify-center rounded-full bg-[#23182f] px-7 py-3 text-sm font-black text-white transition hover:bg-purple-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-700"
               >
-                Open in Google Maps
+                {section.directionsButtonText}
               </a>
             </div>
           </aside>

@@ -1,47 +1,30 @@
 import Image from "next/image";
+import type {
+  FavoriteProductContent,
+  FavoritesSectionContent,
+} from "@/types/site-content";
 
-const favorites = [
-  {
-    name: "Taro Milk Tea",
-    label: "Customer Favorite",
-    description:
-      "Creamy taro milk tea with chewy boba and a smooth, perfectly sweet flavor.",
-    image: "/images/hero/taro.png",
-    imageAlt: "Taro Milk Tea from Bubble House Nutrition",
-  },
-  {
-    name: "Strawberry Cheesecake",
-    label: "Sweet & Creamy",
-    description:
-      "A creamy strawberry cheesecake-inspired drink with a rich and refreshing finish.",
-    image: "/images/hero/strawberry-chesecake.png",
-    imageAlt: "Strawberry Cheesecake drink from Bubble House Nutrition",
-  },
-  {
-    name: "Protein Waffle",
-    label: "Perfect Breakfast",
-    description:
-      "A freshly prepared protein waffle topped with fruit and delicious flavor.",
-    image: "/images/hero/protein-waffle.png",
-    imageAlt: "Protein Waffle from Bubble House Nutrition",
-  },
-] as const;
-
-export default function BestSellers() {
+export default function BestSellers({
+  section,
+  favorites,
+}: {
+  section: FavoritesSectionContent;
+  favorites: readonly FavoriteProductContent[];
+}) {
   return (
     <section id="favorites" className="bg-[#fcfaf7] py-20 sm:py-24">
       <div className="mx-auto max-w-7xl px-5 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-xs font-black uppercase tracking-[0.24em] text-purple-600 sm:text-sm">
-            Bubble House Favorites
+            {section.eyebrow}
           </p>
 
           <h2 className="mt-3 text-4xl font-black tracking-tight text-[#23182f] sm:text-5xl">
-            Customer favorites
+            {section.title}
           </h2>
 
           <p className="mt-4 text-lg leading-8 text-gray-600">
-            Discover three of our most-loved Bubble House creations.
+            {section.description}
           </p>
         </div>
 
@@ -56,13 +39,15 @@ export default function BestSellers() {
                   {favorite.label}
                 </span>
 
-                <Image
-                  src={favorite.image}
-                  alt={favorite.imageAlt}
-                  fill
-                  sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33vw"
-                  className="object-contain p-2 transition duration-500 ease-out group-hover:scale-[1.025]"
-                />
+                {favorite.imageUrl && (
+                  <Image
+                    src={favorite.imageUrl}
+                    alt={favorite.imageAlt}
+                    fill
+                    sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33vw"
+                    className="object-contain p-2 transition duration-500 ease-out group-hover:scale-[1.025]"
+                  />
+                )}
               </div>
 
               <div className="flex flex-1 flex-col border-t border-purple-50 p-6 sm:p-7">
@@ -78,7 +63,7 @@ export default function BestSellers() {
                   href="#menu"
                   className="mt-4 inline-flex min-h-11 w-fit items-center gap-2 text-sm font-black text-purple-700 transition-colors hover:text-purple-900 focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-purple-700"
                 >
-                  View menu
+                  {section.buttonText}
                   <span aria-hidden="true" className="transition group-hover:translate-x-1">
                     →
                   </span>

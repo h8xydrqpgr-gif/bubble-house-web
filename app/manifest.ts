@@ -1,11 +1,13 @@
 import type { MetadataRoute } from "next";
+import { getSiteContent } from "@/sanity/lib/get-site-content";
 
-export default function manifest(): MetadataRoute.Manifest {
+export default async function manifest(): Promise<MetadataRoute.Manifest> {
+  const { business, settings } = await getSiteContent();
+
   return {
-    name: "Bubble House Nutrition",
-    short_name: "Bubble House",
-    description:
-      "Refreshing teas, shakes, boba, coffee and waffles in Lexington, Kentucky.",
+    name: business.name,
+    short_name: business.name.replace(/\s+Nutrition$/, ""),
+    description: settings.metaDescription,
     start_url: "/",
     display: "standalone",
     background_color: "#fcfaf7",

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { business } from "@/data/business";
+import type { BusinessInfoContent } from "@/types/site-content";
 
 const links = [
   { name: "Home", href: "#home" },
@@ -12,13 +12,25 @@ const links = [
   { name: "Visit Us", href: "#visit" },
 ];
 
-export default function Navbar() {
+export default function Navbar({
+  business,
+  announcementText,
+  orderButtonText,
+}: {
+  business: BusinessInfoContent;
+  announcementText: string;
+  orderButtonText: string;
+}) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const businessNameParts = business.name.trim().split(/\s+/);
+  const businessNameSuffix = businessNameParts.pop() || business.name;
+  const businessNamePrimary =
+    businessNameParts.join(" ") || businessNameSuffix;
 
   return (
     <>
       <div className="bg-purple-700 px-4 py-2 text-center text-[11px] font-bold uppercase tracking-[0.16em] text-white">
-        Fresh drinks made daily in {business.city}, Kentucky
+        {announcementText}
       </div>
 
       <header className="sticky top-0 z-50 border-b border-purple-100 bg-white/90 backdrop-blur-xl">
@@ -30,7 +42,7 @@ export default function Navbar() {
             <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-full">
               <Image
                 src="/images/logobb.png"
-                alt="Bubble House Nutrition logo"
+                alt={`${business.name} logo`}
                 fill
                 priority
                 className="object-cover"
@@ -40,11 +52,11 @@ export default function Navbar() {
 
             <div>
               <p className="text-lg font-black leading-none text-[#241b2f]">
-                Bubble House
+                {businessNamePrimary}
               </p>
 
               <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.22em] text-purple-600">
-                Nutrition
+                {businessNameSuffix}
               </p>
             </div>
           </a>
@@ -63,12 +75,12 @@ export default function Navbar() {
 
           <div className="flex items-center gap-3">
             <a
-              href={business.delivery.doordash}
+              href={business.orderingUrl}
               target="_blank"
               rel="noreferrer"
               className="hidden min-h-11 rounded-full bg-purple-600 px-6 py-3 text-sm font-black text-white shadow-lg shadow-purple-200 transition hover:-translate-y-0.5 hover:bg-purple-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-700 sm:block"
             >
-              Order Online
+              {orderButtonText}
             </a>
 
             <button
@@ -98,13 +110,13 @@ export default function Navbar() {
               ))}
 
               <a
-                href={business.delivery.doordash}
+                href={business.orderingUrl}
                 target="_blank"
                 rel="noreferrer"
                 onClick={() => setMenuOpen(false)}
                 className="mt-5 rounded-full bg-purple-600 px-6 py-4 text-center text-sm font-black text-white shadow-lg shadow-purple-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-700 sm:hidden"
               >
-                Order Online
+                {orderButtonText}
               </a>
             </nav>
           </div>

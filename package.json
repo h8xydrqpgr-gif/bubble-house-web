@@ -9,7 +9,8 @@
     "lint": "eslint",
     "sanity": "sanity",
     "sanity:import:drinks": "sanity exec scripts/import-drinks.ts --with-user-token",
-    "sanity:migrate:menu-fields": "sanity exec scripts/migrate-menu-fields.ts --with-user-token"
+    "sanity:migrate:menu-fields": "sanity exec scripts/migrate-menu-fields.ts --with-user-token",
+    "sanity:import:site-content": "sanity exec scripts/import-site-content.ts --with-user-token"
   },
   "dependencies": {
     "@sanity/image-url": "^2.1.1",

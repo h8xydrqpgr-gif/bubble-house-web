@@ -7,6 +7,7 @@ export const categoryType = defineType({
   groups: [
     { name: "content", title: "Content", default: true },
     { name: "display", title: "Display" },
+    { name: "homepage", title: "Homepage Card" },
   ],
   fields: [
     defineField({
@@ -49,6 +50,58 @@ export const categoryType = defineType({
       description: "Inactive categories are hidden from the public menu.",
       initialValue: true,
       validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "showOnHomepage",
+      title: "Show on homepage",
+      type: "boolean",
+      group: "homepage",
+      initialValue: false,
+      description:
+        "Show this category in the three-card category overview above the menu.",
+    }),
+    defineField({
+      name: "homepageDescription",
+      title: "Homepage description",
+      type: "text",
+      rows: 3,
+      group: "homepage",
+      description:
+        "Short marketing copy for the homepage card. Falls back to the category description.",
+    }),
+    defineField({
+      name: "homepageIcon",
+      title: "Homepage icon",
+      type: "string",
+      group: "homepage",
+      description:
+        "Optional text or emoji used when no homepage image is provided.",
+    }),
+    defineField({
+      name: "homepageImage",
+      title: "Homepage image",
+      type: "image",
+      group: "homepage",
+      options: { hotspot: true },
+    }),
+    defineField({
+      name: "homepageImageAlt",
+      title: "Homepage image alternative text",
+      type: "string",
+      group: "homepage",
+    }),
+    defineField({
+      name: "homepageButtonText",
+      title: "Button text",
+      type: "string",
+      group: "homepage",
+    }),
+    defineField({
+      name: "homepageSortOrder",
+      title: "Homepage display order",
+      type: "number",
+      group: "homepage",
+      validation: (rule) => rule.integer().min(0),
     }),
   ],
   orderings: [

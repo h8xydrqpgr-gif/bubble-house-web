@@ -1,5 +1,8 @@
 import Image from "next/image";
-import { business } from "@/data/business";
+import type {
+  BusinessInfoContent,
+  FooterContent,
+} from "@/types/site-content";
 
 const quickLinks = [
   { label: "Home", href: "#home" },
@@ -9,17 +12,25 @@ const quickLinks = [
   { label: "Visit Us", href: "#visit" },
 ] as const;
 
-const socialLinks = [
-  { label: "Facebook", href: business.social.facebook },
-  { label: "Yelp", href: business.social.yelp },
-  { label: "Apple Maps", href: business.maps.apple },
-  { label: "Google Maps", href: business.maps.google },
-].filter((link) => Boolean(link.href));
-
 const linkStyles =
   "w-fit text-purple-100 transition hover:text-white focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-purple-300";
 
-export default function Footer() {
+export default function Footer({
+  business,
+  content,
+}: {
+  business: BusinessInfoContent;
+  content: FooterContent;
+}) {
+  const socialLinks = [
+    ...business.socialLinks.map((link) => ({
+      label: link.label,
+      href: link.url,
+    })),
+    { label: "Apple Maps", href: business.appleMapsUrl },
+    { label: "Google Maps", href: business.googleMapsUrl },
+  ].filter((link) => Boolean(link.href));
+
   return (
     <footer className="bg-[#211929] text-white">
       <div className="mx-auto max-w-7xl px-5 pb-8 pt-16 sm:pt-20 lg:px-8">
@@ -29,7 +40,7 @@ export default function Footer() {
               <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-full ring-1 ring-white/15">
                 <Image
                   src="/images/logobb.png"
-                  alt="Bubble House Nutrition logo"
+                  alt={`${business.name} logo`}
                   fill
                   sizes="56px"
                   className="object-cover"
@@ -42,8 +53,7 @@ export default function Footer() {
             </div>
 
             <p className="mt-5 max-w-sm leading-7 text-purple-100/80">
-              Refreshing teas, creamy shakes, coffee, waffles and delicious
-              favorites made for every craving.
+              {content.description}
             </p>
           </section>
 
@@ -75,17 +85,18 @@ export default function Footer() {
             </h2>
 
             <div className="mt-5 space-y-5 text-purple-100/80">
-              {business.maps.google && (
+              {business.googleMapsUrl && (
                 <address className="not-italic leading-7">
                   <a
-                    href={business.maps.google}
+                    href={business.googleMapsUrl}
                     target="_blank"
                     rel="noreferrer"
                     className={`${linkStyles} inline-block`}
                   >
-                    {business.address}
+                    {business.address.street}
                     <br />
-                    {business.city}, {business.state} {business.zip}
+                    {business.address.city}, {business.address.state}{" "}
+                    {business.address.zip}
                   </a>
                 </address>
               )}
@@ -98,14 +109,12 @@ export default function Footer() {
               </a>
 
               <dl className="space-y-2 text-sm leading-6">
-                <div>
-                  <dt className="font-bold text-white">Monday – Saturday</dt>
-                  <dd>{business.hours.mondaySaturday}</dd>
-                </div>
-                <div>
-                  <dt className="font-bold text-white">Sunday</dt>
-                  <dd>{business.hours.sunday}</dd>
-                </div>
+                {business.businessHours.map((row) => (
+                  <div key={row.label}>
+                    <dt className="font-bold text-white">{row.label}</dt>
+                    <dd>{row.hours}</dd>
+                  </div>
+                ))}
               </dl>
             </div>
           </section>
@@ -140,9 +149,10 @@ export default function Footer() {
 
         <div className="mt-14 flex flex-col gap-3 border-t border-white/10 pt-7 text-center text-sm text-purple-200/70 sm:flex-row sm:items-center sm:justify-between sm:text-left">
           <p>
-            © {new Date().getFullYear()} {business.name}. All rights reserved.
+            © {new Date().getFullYear()} {business.name}.{" "}
+            {content.copyrightText}
           </p>
-          <p>Made with care in Kentucky.</p>
+          <p>{content.closingText}</p>
         </div>
       </div>
     </footer>

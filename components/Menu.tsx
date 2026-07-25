@@ -8,6 +8,7 @@ import {
   type MenuCategorySelectDetail,
 } from "@/components/menu-navigation";
 import type { MenuCategory, MenuProduct } from "@/types/menu";
+import type { SectionContent } from "@/types/site-content";
 
 interface ActiveImage {
   src: string;
@@ -46,9 +47,11 @@ function formatPrice(price: number) {
 export default function Menu({
   categories,
   drinks,
+  section,
 }: {
   categories: readonly MenuCategory[];
   drinks: readonly MenuProduct[];
+  section: SectionContent;
 }) {
   const orderedCategories = categories
     .map((category, index) => ({ category, index }))
@@ -150,16 +153,15 @@ export default function Menu({
       >
         <div className="mx-auto max-w-3xl text-center">
           <p className="text-xs font-black uppercase tracking-[0.24em] text-purple-600 sm:text-sm">
-            Our Menu
+            {section.eyebrow}
           </p>
 
           <h2 className="mt-3 text-4xl font-black tracking-tight text-[#23182f] sm:text-5xl">
-            Find your new favorite
+            {section.title}
           </h2>
 
           <p className="mt-4 text-lg leading-8 text-gray-600">
-            Explore refreshing teas, creamy shakes, milk teas, coffee, waffles,
-            delicious add-ons and wellness boosters.
+            {section.description}
           </p>
         </div>
 

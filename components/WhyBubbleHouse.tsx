@@ -1,27 +1,15 @@
-const benefits = [
-  {
-    icon: "✨",
-    title: "Made Fresh",
-    text: "Every drink is prepared fresh when you order.",
-  },
-  {
-    icon: "💜",
-    title: "Made With Care",
-    text: "Friendly service and quality in every visit.",
-  },
-  {
-    icon: "🧋",
-    title: "Premium Ingredients",
-    text: "Quality ingredients for bold flavors you'll love.",
-  },
-  {
-    icon: "🚗",
-    title: "Delivery Available",
-    text: "Enjoy Bubble House at home with DoorDash.",
-  },
-];
+import type {
+  BenefitContent,
+  SectionContent,
+} from "@/types/site-content";
 
-export default function WhyBubbleHouse() {
+export default function WhyBubbleHouse({
+  section,
+  benefits,
+}: {
+  section: SectionContent;
+  benefits: readonly BenefitContent[];
+}) {
   return (
     <section className="bg-[#fbf9ff] py-20 sm:py-24">
       <div className="mx-auto max-w-7xl px-5 lg:px-8">
@@ -29,16 +17,15 @@ export default function WhyBubbleHouse() {
         <div className="text-center max-w-3xl mx-auto">
 
           <p className="text-sm font-black uppercase tracking-[0.25em] text-purple-600">
-            Why Bubble House?
+            {section.eyebrow}
           </p>
 
           <h2 className="mt-4 text-4xl sm:text-5xl font-black tracking-tight">
-            More than a drink.
+            {section.title}
           </h2>
 
           <p className="mt-5 text-lg leading-8 text-gray-600">
-            Every drink is handcrafted with attention to detail, premium
-            ingredients and friendly service.
+            {section.description}
           </p>
 
         </div>
@@ -60,7 +47,7 @@ export default function WhyBubbleHouse() {
               </h3>
 
               <p className="mt-3 text-gray-600 leading-7">
-                {item.text}
+                {item.description}
               </p>
 
             </div>
