@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import LocalBusinessSchema from "@/components/LocalBusinessSchema";
 import { getSiteContent } from "@/sanity/lib/get-site-content";
 import "./globals.css";
@@ -87,6 +88,7 @@ export default async function RootLayout({
         <LocalBusinessSchema business={business} />
         {children}
       </body>
+      <GoogleAnalytics gaId="G-Z6K7GPTV6R" />
     </html>
   );
 }

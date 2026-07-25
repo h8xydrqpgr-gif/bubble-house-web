@@ -13,6 +13,7 @@
     "sanity:import:site-content": "sanity exec scripts/import-site-content.ts --with-user-token"
   },
   "dependencies": {
+    "@next/third-parties": "^16.2.12",
     "@sanity/image-url": "^2.1.1",
     "lucide-react": "^1.26.0",
     "next": "16.2.10",
