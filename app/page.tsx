@@ -1,7 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Categories from "@/components/Categories";
-import Menu from "@/components/Menu";
+import MenuSection from "@/components/MenuSection";
 import BestSellers from "@/components/TopDrinks";
 import WhyBubbleHouse from "@/components/WhyBubbleHouse";
 import Gallery from "@/components/Gallery";
@@ -14,7 +14,7 @@ export default function Home() {
       <Navbar />
       <Hero />
       <Categories />
-      <Menu />
+      <MenuSection />
       <BestSellers />
       <WhyBubbleHouse />
       <Gallery />

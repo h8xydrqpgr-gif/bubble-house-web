@@ -1,17 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { drinks, menuCategories } from "@/data/drinks";
-import type { MenuFilter } from "@/types/drinks";
-
-const filters: readonly MenuFilter[] = ["All", ...menuCategories];
+import type { MenuCategory, MenuProduct } from "@/types/menu";
 
 function formatPrice(price: number) {
   return Number.isInteger(price) ? `$${price}` : `$${price.toFixed(2)}`;
 }
 
-export default function Menu() {
-  const [activeFilter, setActiveFilter] = useState<MenuFilter>("All");
+export default function Menu({
+  categories,
+  drinks,
+}: {
+  categories: readonly MenuCategory[];
+  drinks: readonly MenuProduct[];
+}) {
+  const filters = ["All", ...categories.map((category) => category.name)];
+  const [activeFilter, setActiveFilter] = useState("All");
 
   const visibleDrinks =
     activeFilter === "All"
