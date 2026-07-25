@@ -1,7 +1,8 @@
 import "server-only";
 
+import { connection } from "next/server";
 import { isSanityConfigured } from "@/sanity/env";
-import { sanityFetch } from "@/sanity/lib/live";
+import { sanityClient } from "@/sanity/lib/client";
 import { adaptSanityMenu } from "@/sanity/lib/menu-adapter";
 import { getFallbackMenuData } from "@/sanity/lib/menu-fallback";
 import { menuQuery } from "@/sanity/queries/menu";
@@ -15,12 +16,19 @@ export async function getMenuData(): Promise<MenuData> {
     return getFallbackMenuData();
   }
 
+  await connection();
+
   try {
-    const { data: sanityCategories } = await sanityFetch({
-      query: menuQuery,
-    });
+    const sanityCategories = await sanityClient.fetch<SanityMenuCategory[]>(
+      menuQuery,
+      {},
+      {
+        cache: "no-store",
+        useCdn: false,
+      },
+    );
     const menu = adaptSanityMenu(
-      sanityCategories as SanityMenuCategory[],
+      sanityCategories,
     );
 
     if (menu.products.length === 0) {

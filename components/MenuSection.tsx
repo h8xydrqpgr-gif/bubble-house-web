@@ -8,7 +8,7 @@ export default async function MenuSection() {
   return (
     <>
       <Menu categories={menu.categories} drinks={menu.products} />
-      <SanityLive />
+      <SanityLive action="refresh" />
     </>
   );
 }
