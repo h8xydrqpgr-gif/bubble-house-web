@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import type { MenuCategory, MenuProduct } from "@/types/menu";
 
@@ -78,6 +79,18 @@ export default function Menu({
               className="group flex h-full flex-col rounded-[1.75rem] border border-purple-100/90 bg-white p-6 shadow-[0_10px_30px_rgba(50,30,70,0.05)] transition duration-300 ease-out hover:-translate-y-1 hover:border-purple-200 hover:shadow-[0_18px_42px_rgba(50,30,70,0.1)]"
             >
               <div className="flex items-start justify-between gap-4">
+                {drink.imageUrl && (
+                  <div className="relative size-20 shrink-0">
+                    <Image
+                      src={drink.imageUrl}
+                      alt={drink.imageAlt || drink.name}
+                      fill
+                      sizes="80px"
+                      className="object-contain"
+                    />
+                  </div>
+                )}
+
                 <div className="min-w-0">
                   <p className="text-xs font-bold uppercase tracking-[0.16em] text-purple-600">
                     {drink.category}
