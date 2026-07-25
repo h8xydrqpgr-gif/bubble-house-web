@@ -86,6 +86,9 @@ export interface GalleryItemContent {
   title: string;
   imageUrl: string;
   alt: string;
+  isFeatured: boolean;
+  width: number;
+  height: number;
   sortOrder: number;
 }
 

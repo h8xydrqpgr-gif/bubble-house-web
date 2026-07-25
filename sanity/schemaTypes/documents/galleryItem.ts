@@ -27,6 +27,38 @@ export const galleryItemType = defineType({
       validation: (rule) => rule.required().max(160),
     }),
     defineField({
+      name: "isFeatured",
+      title: "Featured image",
+      type: "boolean",
+      description:
+        "Show this as the large editorial image. Only one visible gallery item can be featured.",
+      initialValue: false,
+      validation: (rule) =>
+        rule.custom(async (value, context) => {
+          if (!value || !context.document?._id) {
+            return true;
+          }
+
+          const documentId = context.document._id.replace(/^drafts\./, "");
+          const client = context
+            .getClient({ apiVersion: "2025-01-01" })
+            .withConfig({ perspective: "raw" });
+          const featuredCount = await client.fetch<number>(
+            `count(*[
+              _type == "galleryItem" &&
+              isFeatured == true &&
+              coalesce(isActive, true) == true &&
+              !(_id in [$documentId, "drafts." + $documentId])
+            ])`,
+            { documentId },
+          );
+
+          return featuredCount === 0
+            ? true
+            : "Another visible gallery item is already featured.";
+        }),
+    }),
+    defineField({
       name: "sortOrder",
       title: "Display order",
       type: "number",
@@ -54,12 +86,15 @@ export const galleryItemType = defineType({
       media: "image",
       sortOrder: "sortOrder",
       isActive: "isActive",
+      isFeatured: "isFeatured",
     },
-    prepare({ title, media, sortOrder, isActive }) {
+    prepare({ title, media, sortOrder, isActive, isFeatured }) {
       return {
         title,
         media,
-        subtitle: `Order ${sortOrder ?? "not set"} · ${
+        subtitle: `${isFeatured ? "Featured · " : ""}Order ${
+          sortOrder ?? "not set"
+        } · ${
           isActive ? "Visible" : "Hidden"
         }`,
       };

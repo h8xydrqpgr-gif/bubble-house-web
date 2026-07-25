@@ -281,6 +281,7 @@ async function importSiteContent() {
     title: `Bubble House Drink ${sortOrder}`,
     image: image(galleryAssetId),
     alt: "Bubble House Drink",
+    isFeatured: sortOrder === 1,
     sortOrder,
     isActive: true,
   }));

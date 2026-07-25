@@ -77,6 +77,11 @@ interface RawSiteQueryResult {
     title?: string;
     image?: RawSiteImage;
     alt?: string;
+    isFeatured?: boolean;
+    dimensions?: {
+      width?: number;
+      height?: number;
+    };
     sortOrder?: number;
   }>;
 }
@@ -230,14 +235,27 @@ function adaptGallery(
     .map((item) => ({
       id: item._id!,
       title: text(item.title, "Gallery image"),
-      imageUrl: imageUrl(item.image, 1000)!,
+      imageUrl: imageUrl(item.image, 1800)!,
       alt: text(item.alt, item.title ?? "Bubble House drink"),
+      isFeatured: item.isFeatured === true,
+      width: item.dimensions?.width ?? 1200,
+      height: item.dimensions?.height ?? 1200,
       sortOrder: item.sortOrder ?? Number.MAX_SAFE_INTEGER,
     }));
 
-  return adapted.length > 0 || isConfigured
-    ? adapted
-    : fallbackSiteContent.galleryItems;
+  const resolved =
+    adapted.length > 0 || isConfigured
+      ? adapted
+      : fallbackSiteContent.galleryItems;
+
+  if (resolved.length === 0 || resolved.some((item) => item.isFeatured)) {
+    return resolved;
+  }
+
+  return resolved.map((item, index) => ({
+    ...item,
+    isFeatured: index === 0,
+  }));
 }
 
 async function loadSiteContent(): Promise<SiteContent> {

@@ -82,6 +82,8 @@ export const siteContentQuery = defineQuery(`{
     title,
     image,
     alt,
+    isFeatured,
+    "dimensions": image.asset->metadata.dimensions,
     sortOrder
   }
 }`);

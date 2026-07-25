@@ -206,6 +206,9 @@ export const fallbackSiteContent: SiteContent = {
     title: `Bubble House Drink ${sortOrder}`,
     imageUrl: "/images/drink.jpeg",
     alt: "Bubble House Drink",
+    isFeatured: sortOrder === 1,
+    width: 1200,
+    height: 1200,
     sortOrder,
   })),
   visitSection: {
