@@ -11,6 +11,30 @@ interface ActiveImage {
   productName: string;
 }
 
+const categoryDisplayOrder = [
+  "Loaded Teas",
+  "Mega Teas",
+  "Milk Teas",
+  "Protein Shakes",
+  "Coffee",
+  "Waffles",
+  "Add-ons",
+] as const;
+
+function getCategoryDisplayOrder(categoryName: string) {
+  if (categoryName === "Boosters") {
+    return Number.MAX_SAFE_INTEGER;
+  }
+
+  const configuredIndex = categoryDisplayOrder.indexOf(
+    categoryName as (typeof categoryDisplayOrder)[number],
+  );
+
+  return configuredIndex === -1
+    ? categoryDisplayOrder.length
+    : configuredIndex;
+}
+
 function formatPrice(price: number) {
   return Number.isInteger(price) ? `$${price}` : `$${price.toFixed(2)}`;
 }
@@ -22,7 +46,28 @@ export default function Menu({
   categories: readonly MenuCategory[];
   drinks: readonly MenuProduct[];
 }) {
-  const filters = ["All", ...categories.map((category) => category.name)];
+  const orderedCategories = categories
+    .map((category, index) => ({ category, index }))
+    .sort(
+      (a, b) =>
+        getCategoryDisplayOrder(a.category.name) -
+          getCategoryDisplayOrder(b.category.name) ||
+        a.index - b.index,
+    )
+    .map(({ category }) => category);
+  const orderedDrinks = drinks
+    .map((drink, index) => ({ drink, index }))
+    .sort(
+      (a, b) =>
+        getCategoryDisplayOrder(a.drink.category) -
+          getCategoryDisplayOrder(b.drink.category) ||
+        a.index - b.index,
+    )
+    .map(({ drink }) => drink);
+  const filters = [
+    "All",
+    ...orderedCategories.map((category) => category.name),
+  ];
   const [activeFilter, setActiveFilter] = useState("All");
   const [activeImage, setActiveImage] = useState<ActiveImage>();
   const closeButtonRef = useRef<HTMLButtonElement>(null);
@@ -31,8 +76,8 @@ export default function Menu({
 
   const visibleDrinks =
     activeFilter === "All"
-      ? drinks
-      : drinks.filter((drink) => drink.category === activeFilter);
+      ? orderedDrinks
+      : orderedDrinks.filter((drink) => drink.category === activeFilter);
 
   useEffect(() => {
     if (!activeImage) {
