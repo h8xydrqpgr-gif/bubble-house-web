@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useId, useRef, useState } from "react";
+import BoosterCard from "@/components/BoosterCard";
 import type { MenuCategory, MenuProduct } from "@/types/menu";
 
 interface ActiveImage {
@@ -80,8 +81,8 @@ export default function Menu({
           </h2>
 
           <p className="mt-4 text-lg leading-8 text-gray-600">
-            Explore refreshing teas, creamy shakes, milk teas, coffee, waffles
-            and delicious add-ons.
+            Explore refreshing teas, creamy shakes, milk teas, coffee, waffles,
+            delicious add-ons and wellness boosters.
           </p>
         </div>
 
@@ -117,7 +118,14 @@ export default function Menu({
         </p>
 
         <div className="mt-8 grid auto-rows-fr gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {visibleDrinks.map((drink) => (
+          {visibleDrinks.map((drink) =>
+            drink.category === "Boosters" ? (
+              <BoosterCard
+                key={drink.id}
+                product={drink}
+                formattedPrice={formatPrice(drink.price)}
+              />
+            ) : (
             <article
               key={drink.id}
               className="group flex h-full flex-col rounded-[1.75rem] border border-purple-100/90 bg-white p-6 shadow-[0_10px_30px_rgba(50,30,70,0.05)] transition duration-300 ease-out hover:-translate-y-1 hover:border-purple-200 hover:shadow-[0_18px_42px_rgba(50,30,70,0.1)]"
@@ -187,7 +195,8 @@ export default function Menu({
                 </p>
               )}
             </article>
-          ))}
+            ),
+          )}
         </div>
       </div>
 
